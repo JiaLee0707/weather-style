@@ -1,30 +1,29 @@
 from tkinter import Frame
-from gui.gui1 import StartPage
-from gui.gui2 import PageOne
+from gui.main import Main
+from gui.gui2 import Gui2
 
-WINDOW_WIDTH = 394
-WINDOW_HEIGHT = 628
+WINDOW_WIDTH = 375
+WINDOW_HEIGHT = 812
 
-class Gui:
+class Controller:
     def __init__(self, root):
         self.root = root
-        self.root.title("Main App")
+        self.root.title("미경의 스타일기")
         self.root.geometry("%dx%d" % (WINDOW_WIDTH, WINDOW_HEIGHT))
-        self.root.configure(bg="#FFFFFF")
+        self.root.configure(bg="#FFCBDD")
 
         container = Frame(self.root)
         container.pack(side="top", fill="both", expand=True)
 
         self.frames = {}
         
-        for F in (StartPage, PageOne):
+        for F in (Main, Gui2):
             page_name = F.__name__
             frame = F(parent=container, controller=self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
             self.frames[page_name] = frame
-            
             frame.grid(row=0, column=0, sticky="nsew")
         
-        self.show_frame("StartPage")
+        self.show_frame("Main")
 
     def show_frame(self, page_name):
         # for frame in self.frames.values():

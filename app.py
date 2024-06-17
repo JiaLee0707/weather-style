@@ -2,14 +2,14 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 import tkinter as tk
-from gui.gui import Gui
+from gui.controller import Controller
 # from gui.gui1 import init_2
 
 if __name__ == "__main__":
     # Main window constructor
     root = tk.Tk()  # Make temporary window for app to start
     # root.withdraw()  # WithDraw the window
-    app = Gui(root)
+    app = Controller(root)
     # mainWindow()
 
     root.mainloop()

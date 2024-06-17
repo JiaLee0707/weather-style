@@ -1,27 +1,17 @@
 from pathlib import Path
-from tkinter import Frame, Button, PhotoImage
+from tkinter import Frame, Button, PhotoImage, Canvas, Label
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame1")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/home")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class PageOne(Frame):
+class Gui2(Frame):
     def __init__(self, parent, controller, width, height):
         super().__init__(parent)
         self.controller = controller
-        self.configure(width=width, height=height)
+        # self.configure(width=width, height=height)
 
-        self.pageone_image = PhotoImage(file=relative_to_assets("button_1.png"))
-        image_button = Button(
-            self,
-            image=self.pageone_image, 
-            command=lambda: controller.show_frame("StartPage")
-        )
-        image_button.place(
-            x=69.0,
-            y=111.0,
-            width=255.0,
-            height=78.0
-        )
+        self.canvas = Canvas(self, bg="#ffffff", width=width, height=height, bd=0, highlightthickness=0)
+        self.canvas.place(x=0, y=0)
