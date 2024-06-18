@@ -1,6 +1,6 @@
 from tkinter import Frame
 from gui.main import Main
-from gui.gui2 import Gui2
+from gui.recommend import Recommend
 
 WINDOW_WIDTH = 375
 WINDOW_HEIGHT = 812
@@ -17,13 +17,13 @@ class Controller:
 
         self.frames = {}
         
-        for F in (Main, Gui2):
+        for F in (Main, Recommend):
             page_name = F.__name__
             frame = F(parent=container, controller=self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
-        self.show_frame("Main")
+        self.show_frame("Recommend")
 
     def show_frame(self, page_name):
         # for frame in self.frames.values():
