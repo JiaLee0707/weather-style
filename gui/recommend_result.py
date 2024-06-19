@@ -87,3 +87,7 @@ class RecommendResult(Frame):
         self.controller.recommend_style = None
 
             
+    def tkraise(self, aboveThis=None):
+        super().tkraise(aboveThis)
+        print("aaaa")
+        # self.update_data_from_server()
