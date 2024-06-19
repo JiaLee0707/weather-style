@@ -2,6 +2,7 @@ from tkinter import Frame, PhotoImage, Label, Canvas, Scrollbar
 from utils.utils import get_assets_path, CustomCanvas, load_custom_font
 from datetime import datetime, date
 import calendar
+from db import db
 
 ASSETS_PATH = get_assets_path("/style_list")
 
@@ -41,6 +42,9 @@ class StyleList(Frame):
         self.inner_frame.bind("<Enter>", self.bind_mouse_scroll)
         self.inner_frame.bind("<Leave>", self.unbind_mouse_scroll)
 
+        self.topImage = []
+        self.topImageIndex = 0
+
         self.draw_screen()
 
     def on_frame_configure(self, event=None):
@@ -63,7 +67,9 @@ class StyleList(Frame):
             image=self.background_image
         )
 
-        if False:
+        styleList = db.getStyleList()
+
+        if len(styleList) <= 0:
             self.notting_saved_image = PhotoImage(file=NOTHING_SAVED_IMAGE_PATH)    
             self.noting_saved = self.canvas.create_image(
                 375.0 / 2,
@@ -71,17 +77,26 @@ class StyleList(Frame):
                 image=self.notting_saved_image
             )
         else:
-            date_font = load_custom_font(24, "bold")
-            self.date = Label(self.inner_frame, text="2024년 6월", font=date_font, bg="#FFFFFF", fg="black")
-            self.date.grid(row=0, column=0, columnspan=1, pady=(20, 0)) 
-            # self.date.pack(pady=(10, 0))
-            self.contents_image = PhotoImage(file=CONTENTS_IMAGE_PATH)
-            for i in range(10): 
-                contents_label = Label(self.inner_frame, image=self.contents_image, bg="#FFFFFF")
-                # contents_label.pack(pady=(30, i))
-                contents_label.grid(row=(i // 2) + 1, column=i % 2, padx=5, pady=(10, 10))
-                contents_label.grid(row=(i // 2) + 1, column=i % 2, padx=5, pady=(10, 10))
-            pass
+            matchingDateSet = sorted(set([styleInfo.get("matching_date") for styleInfo in styleList]), reverse=True)
+            row = 0
+
+            for matchingDate in matchingDateSet:
+                mathcingDateStyleList = [styleInfo for styleInfo in styleList if styleInfo.get("matching_date") == matchingDate]
+
+                date_font = load_custom_font(24, "bold")
+                self.date = Label(self.inner_frame, text=matchingDate.strftime("%Y.%m.%d"), font=date_font, bg="#FFFFFF", fg="black")
+                self.date.grid(row=row, column=0, columnspan=1, pady=(20, 0)) 
+                row += 1
+                
+                for i in range(len(mathcingDateStyleList)):
+                    self.topImage.append(PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(10, 10))
+                    contents_label = Label(self.inner_frame, image=self.topImage[self.topImageIndex], bg="#FFFFFF")
+                    self.topImageIndex += 1
+                    # contents_label.pack(pady=(30, i))
+                    contents_label.grid(row=row, column=i % 2, padx=5, pady=(10, 10))
+                    contents_label.grid(row=row, column=i % 2, padx=5, pady=(10, 10))
+                    if (i % 2 == 1) : 
+                        row += 1
 
         self.recommend_button_image = PhotoImage(file=RECOMMEND_IMAGE_PATH)
         self.recommend_button = self.canvas.create_image(
@@ -96,3 +111,7 @@ class StyleList(Frame):
 
     def reset(self):
         pass
+
+    def tkraise(self, aboveThis=None):
+        super().tkraise(aboveThis)
+        self.draw_screen()
