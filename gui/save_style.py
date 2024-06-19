@@ -39,9 +39,12 @@ class SaveStyle(Frame):
             image=self.background_image
         )
 
-        title_font = load_custom_font(22, "bold")
-        title = Label(self, text="2024년 6월 17일에 추천받았어!", font=title_font, bg="#FFFFFF", fg="black")
-        title.place(x=134, y=176) 
+        title_font = load_custom_font(27, "bold")
+        title = Label(self, text="2024/06/17", font=title_font, bg="#FFFFFF", fg="black")
+        title.place(x=30, y=135) 
+        title_font = load_custom_font(27, "bold")
+        title = Label(self, text="추천받은 코디야!", font=title_font, bg="#FFFFFF", fg="black")
+        title.place(x=30, y=175) 
 
         self.move_button_image = PhotoImage(file=MOVE_IMAGE_PATH)
         self.move_button = self.canvas.create_image(
@@ -74,9 +77,10 @@ class SaveStyle(Frame):
         # self.controller.recommend_style = None
 
     def draw_style_result(self): 
-        self.recommendResult = db.getRandomStyle(10, self.controller.recommend_style)[0]
+        # 아이디 값 변경 필요 !!!!!
+        self.styleResult = db.getStyleById(1)
         
-        self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
+        self.styleBottomImage = PhotoImage(file=self.styleResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
             220.0,  # x 좌표
             500.0,  # y 좌표
@@ -84,7 +88,7 @@ class SaveStyle(Frame):
             tags="styleBottom"
         )
 
-        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(4, 4)
+        self.styleTopImage = PhotoImage(file=self.styleResult.get('image_path')).subsample(4, 4)
         self.styleTop = self.canvas.create_image(
             160.0,  # x 좌표
             350.0,  # y 좌표
@@ -100,7 +104,7 @@ class SaveStyle(Frame):
             image = self.styleLTopLinkImage,
             tags="styleTopLink"
         )
-        self.canvas.tag_bind(self.styleTopLink, "<Button-1>", lambda e: self.open_webbrowser(self.recommendResult.get('link')))
+        self.canvas.tag_bind(self.styleTopLink, "<Button-1>", lambda e: self.open_webbrowser(self.styleResult.get('link')))
         
         self.styleBottomLinkImage = PhotoImage(file=LINK_IMAGE_PATH)
         self.styleBottomLink = self.canvas.create_image(
@@ -109,11 +113,11 @@ class SaveStyle(Frame):
             image = self.styleBottomLinkImage,
             tags="styleBottomLink"
         )
-        self.canvas.tag_bind(self.styleBottomLink, "<Button-1>", lambda e: self.open_webbrowser(self.recommendResult.get('bottom.link')))
+        self.canvas.tag_bind(self.styleBottomLink, "<Button-1>", lambda e: self.open_webbrowser(self.styleResult.get('bottom.link')))
         
     def open_webbrowser(self, url):
         webbrowser.open_new(url)
             
-    # def tkraise(self, aboveThis=None):
-    #     super().tkraise(aboveThis)
-    #     self.draw_style_result()
+    def tkraise(self, aboveThis=None):
+        super().tkraise(aboveThis)
+        self.draw_style_result()

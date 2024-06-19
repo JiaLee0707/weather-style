@@ -51,3 +51,16 @@ def getStyleList() :
 
     cur.execute(sql)
     return cur.fetchall()
+
+def getStyleById(id) :
+    global conn, cur
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+
+    sql = '''select s.id, matching_date, temperature, top.image_path, top.link, bottom.image_path, bottom.link, created_date from style_list s
+            join clothes_top top on s.clothes_top_id = top.id
+            join clothes_bottom bottom on s.clothes_bottom_id = bottom.id
+            where s.id = ''' + str(id) + '''
+            order by matching_date desc, created_date asc;'''
+
+    cur.execute(sql)
+    return cur.fetchall()[0]
