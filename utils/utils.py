@@ -21,7 +21,7 @@ default_font = None
 
 def load_custom_font(size=24, weight="bold"):
     font_path_str = str(DEFAULT_FONT_PATH)
-    print(DEFAULT_FONT_PATH)
+    # print(DEFAULT_FONT_PATH)
     if not Path(font_path_str).exists():
         raise FileNotFoundError(f"Font file not found: {font_path_str}")
 

@@ -52,7 +52,7 @@ class Main(Frame):
 
     def style_recommend_button_event_handler(self, eventType):
         if eventType == 'click':
-            self.controller.show_frame("Recommend")
+            self.controller.show_frame("RecommendCalendar")
         elif eventType == 'enter':
             self.canvas.itemconfig(self.style_recommend_button, image=self.style_recommend_hover_image)
         elif eventType == 'leave':
@@ -60,7 +60,7 @@ class Main(Frame):
 
     def style_list_button_event_handler(self, eventType):
         if eventType == 'click':
-            self.controller.show_frame("Gui2")
+            self.controller.show_frame("StyleList")
         elif eventType == 'enter':
             self.canvas.itemconfig(self.style_list_button, image=self.style_list_hover_image)
         elif eventType == 'leave':

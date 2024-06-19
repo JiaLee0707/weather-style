@@ -4,11 +4,11 @@
 import tkinter as tk
 from gui.controller import Controller
 # from gui.gui1 import init_2
-from db import db
+# from db import db
 
 if __name__ == "__main__":
     # DB Connection
-    db.connect()
+    # db.connect()
     # 사용 방법 정리, 추후 삭제
     #result = db.getRandomStyle(10, '캐주얼')[0]
     #db.saveMachingStyle('2024-06-14', 10, result.get('id'), result.get('bottom.id'))

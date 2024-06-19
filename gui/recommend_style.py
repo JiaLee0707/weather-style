@@ -125,9 +125,16 @@ class RecommendStyle(Frame):
         if eventType == 'click':
             if self.controller.recommend_style is not None:
                 self.controller.show_frame("RecommendResult")
+                self.reset()
             # self.controller.show_frame("Gui2")
         # elif eventType == 'enter':
         #     self.canvas.itemconfig(self.style_list_button, image=self.style_list_hover_image)
         # elif eventType == 'leave':
         #     self.canvas.itemconfig(self.style_list_button, image=self.style_list_image)
 
+    def reset(self):
+        self.canvas.itemconfig(self.lovely_button, image=self.lovely_button_disabled_image)
+        self.canvas.itemconfig(self.feminine_button, image=self.feminine_button_disabled_image)
+        self.canvas.itemconfig(self.street_button, image=self.street_button_disabled_image)
+        self.canvas.itemconfig(self.casual_button, image=self.casual_button_disabled_image)
+        self.canvas.itemconfig(self.next_button, image=self.next_button_disabled_image)

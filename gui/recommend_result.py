@@ -59,6 +59,7 @@ class RecommendResult(Frame):
         self.canvas.tag_bind(self.retry_button, "<Button-1>", lambda e: self.button_event_handler("retry"))
 
     def button_event_handler(self, type):
+        print(type)
         if type == 'save':
             self.save_lnstructions_image = PhotoImage(file=SAVE_INSTRUCTIONS_IMAGE_PATH)    
             self.save_lnstructions = self.canvas.create_image(
@@ -71,7 +72,7 @@ class RecommendResult(Frame):
             self.canvas.tag_unbind(self.result_button, "<Button-1>")
             self.canvas.tag_bind(self.result_button, "<Button-1>", lambda e: self.button_event_handler("move"))
         elif type == 'move':
-            self.controller.show_frame("RecommendCalendar")
+            self.controller.show_frame("StyleList")
             self.reset()
         elif type == 'retry':
             self.controller.show_frame("Main")
@@ -82,5 +83,7 @@ class RecommendResult(Frame):
         self.canvas.itemconfig(self.result_button, image=self.save_button_image)
         self.canvas.tag_unbind(self.result_button, "<Button-1>")
         self.canvas.tag_bind(self.result_button, "<Button-1>", lambda e: self.button_event_handler("save"))
+        self.controller.recommend_date = None
+        self.controller.recommend_style = None
 
             
