@@ -1,7 +1,8 @@
 import sys
-# from PIL import Image, ImageFont, ImageDraw, ImageTk
 import tkinter as tk
 from pathlib import Path
+import requests
+from datetime import datetime
 
 sys.path.append(str(Path(__file__).resolve().parent))
 
@@ -31,6 +32,27 @@ def load_custom_font(size=24, weight="bold"):
     # Create a custom font object
     custom_font = tk.font.Font(family="ONE Mobile POP", size=size, weight=weight)
     return custom_font
+
+
+def get_current_temperature(date):
+    api_key = '243a864f8a027704f94f8c945a071854'
+    city_name = "Seoul"
+    api_url = f"http://api.openweathermap.org/data/2.5/forecast?id=524901&q={city_name}&appid={api_key}&lang=kr&units=metric"
+
+    response = requests.get(api_url)
+    data = response.json()
+    
+    matching_date = datetime.strptime(date, "%Y-%m-%d")
+    
+    now = datetime.now()
+    formatted_date = now.strftime("%Y-%m-%d")
+    current_date = datetime.strptime(formatted_date, "%Y-%m-%d")
+
+    date_difference = matching_date - current_date
+
+    index = date_difference.days
+
+    return data['list'][index]['main']["temp"]
 
 class CustomCanvas(Canvas):
     def __init__(self, parent, width, height, bg_color="#FFCBDD"):

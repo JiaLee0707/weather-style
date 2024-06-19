@@ -1,7 +1,7 @@
 from tkinter import Frame, PhotoImage, Label
-from utils.utils import get_assets_path, CustomCanvas, load_custom_font
+from utils.utils import get_assets_path, CustomCanvas, get_current_temperature
 from datetime import datetime, date
-import calendar
+import webbrowser
 from db import db
 
 ASSETS_PATH = get_assets_path("/recommend_result")
@@ -14,6 +14,8 @@ SAVE_INSTRUCTIONS_IMAGE_PATH = ASSETS_PATH / "save_Instructions.png"
 SAVE_IMAGE_PATH = ASSETS_PATH / "save_button.png"
 MOVE_IMAGE_PATH = ASSETS_PATH / "move_button.png"
 RETRY_IMAGE_PATH = ASSETS_PATH / "retry_button.png"
+
+LINK_IMAGE_PATH = ASSETS_PATH / "link.png"
 
 class RecommendResult(Frame):
     def __init__(self, parent, controller, width, height):
@@ -65,9 +67,10 @@ class RecommendResult(Frame):
     def button_event_handler(self, type):
         if type == 'save':
             recommendDate = self.controller.recommend_date
-            matchingDate = "%d-%d-%d" %(recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
-            # 온도 변경 필요
-            db.saveMachingStyle(matchingDate, 10, self.recommendResult.get('id'), self.recommendResult.get('bottom.id'))
+            matchingDate = "%d-%d-%d" % (recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
+            temp = get_current_temperature(matchingDate)
+
+            db.saveMachingStyle(matchingDate, temp, self.recommendResult.get('id'), self.recommendResult.get('bottom.id'))
 
             self.save_lnstructions_image = PhotoImage(file=SAVE_INSTRUCTIONS_IMAGE_PATH)    
             self.save_lnstructions = self.canvas.create_image(
@@ -88,6 +91,8 @@ class RecommendResult(Frame):
 
     def reset(self):
         self.canvas.delete("save")
+        self.canvas.delete("styleBottom")
+        self.canvas.delete("styleTop")
         self.canvas.itemconfig(self.result_button, image=self.save_button_image)
         self.canvas.tag_unbind(self.result_button, "<Button-1>")
         self.canvas.tag_bind(self.result_button, "<Button-1>", lambda e: self.button_event_handler("save"))
@@ -95,24 +100,46 @@ class RecommendResult(Frame):
         self.controller.recommend_style = None
 
     def draw_style_result(self): 
-        
-        # 온도 변경 필요
         self.recommendResult = db.getRandomStyle(10, self.controller.recommend_style)[0]
-
+        
         self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
             220.0,  # x 좌표
             500.0,  # y 좌표
-            image = self.styleBottomImage
+            image = self.styleBottomImage,
+            tags="styleBottom"
         )
 
         self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(4, 4)
         self.styleTop = self.canvas.create_image(
             160.0,  # x 좌표
             350.0,  # y 좌표
-            image = self.styleTopImage
+            image = self.styleTopImage,
+            tags="styleTop"
         )
-    
+
+
+        self.styleLTopLinkImage = PhotoImage(file=LINK_IMAGE_PATH)
+        self.styleTopLink = self.canvas.create_image(
+            222.0,  # x 좌표
+            280.0,  # y 좌표
+            image = self.styleLTopLinkImage,
+            tags="styleTopLink"
+        )
+        self.canvas.tag_bind(self.styleTopLink, "<Button-1>", lambda e: self.open_webbrowser(self.recommendResult.get('link')))
+        
+        self.styleBottomLinkImage = PhotoImage(file=LINK_IMAGE_PATH)
+        self.styleBottomLink = self.canvas.create_image(
+            290.0,  # x 좌표
+            510.0,  # y 좌표
+            image = self.styleBottomLinkImage,
+            tags="styleBottomLink"
+        )
+        self.canvas.tag_bind(self.styleBottomLink, "<Button-1>", lambda e: self.open_webbrowser(self.recommendResult.get('bottom.link')))
+        
+
+    def open_webbrowser(self, url):
+        webbrowser.open_new(url)
             
     def tkraise(self, aboveThis=None):
         super().tkraise(aboveThis)

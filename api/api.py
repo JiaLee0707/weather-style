@@ -1,5 +1,5 @@
 import requests
-# import time
+# import timc
 
 
 city_name = "Seoul"
