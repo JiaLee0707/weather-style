@@ -70,8 +70,7 @@ class SaveStyle(Frame):
         # self.controller.recommend_style = None
 
     def draw_style_result(self): 
-        # 아이디 값 변경 필요 !!!!!
-        self.styleResult = db.getStyleById(1)
+        self.styleResult = db.getStyleById(self.controller.style_index)
 
         title_font = load_custom_font(26, "bold")
         title = Label(self, text=self.styleResult.get('matching_date').strftime("%Y/%m/%d"), font=title_font, bg="#FFFFFF", fg="black")

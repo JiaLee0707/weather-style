@@ -18,6 +18,7 @@ class Controller:
 
         self.recommend_date = None
         self.recommend_style = None
+        self.style_index = None
 
         container = Frame(self.root)
         container.pack(side="top", fill="both", expand=True)
@@ -44,3 +45,6 @@ class Controller:
     
     def set_recommend_style(self, style): # tag
         self.recommend_style = style
+    
+    def set_style_index(self, style_index):
+        self.style_index = style_index

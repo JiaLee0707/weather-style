@@ -99,7 +99,8 @@ class StyleList(Frame):
                     # self.contents_label.place(x=0, y=0)
                     # self.contents_label2.place(x=0, y=0)
                     self.frame.grid(row=row, column=col, padx=5, pady=5)
-                    
+                    self.contents_label.bind("<Button-1>", lambda e, styleIndex=mathcingDateStyleList[i].get('id'): self.style_button_event_handler(styleIndex))
+                    self.contents_label2.bind("<Button-1>", lambda e, styleIndex=mathcingDateStyleList[i].get('id'): self.style_button_event_handler(styleIndex))
 
                     col += 1
 
@@ -126,6 +127,10 @@ class StyleList(Frame):
             
         self.canvas.delete("date")
         self.canvas.delete("contents")
+        
+    def style_button_event_handler(self, styleIndex) :
+        self.controller.set_style_index(styleIndex)
+        self.controller.show_frame("SaveStyle")
 
     def tkraise(self, aboveThis=None):
         super().tkraise(aboveThis)
