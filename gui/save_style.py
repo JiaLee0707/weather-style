@@ -39,13 +39,6 @@ class SaveStyle(Frame):
             image=self.background_image
         )
 
-        title_font = load_custom_font(27, "bold")
-        title = Label(self, text="2024/06/17", font=title_font, bg="#FFFFFF", fg="black")
-        title.place(x=30, y=135) 
-        title_font = load_custom_font(27, "bold")
-        title = Label(self, text="추천받은 코디야!", font=title_font, bg="#FFFFFF", fg="black")
-        title.place(x=30, y=175) 
-
         self.move_button_image = PhotoImage(file=MOVE_IMAGE_PATH)
         self.move_button = self.canvas.create_image(
             20.0 + 263.0 / 2,
@@ -79,6 +72,13 @@ class SaveStyle(Frame):
     def draw_style_result(self): 
         # 아이디 값 변경 필요 !!!!!
         self.styleResult = db.getStyleById(1)
+
+        title_font = load_custom_font(27, "bold")
+        title = Label(self, text=self.styleResult.get('matching_date').strftime("%Y/%m/%d"), font=title_font, bg="#FFFFFF", fg="black")
+        title.place(x=30, y=135) 
+        title_font = load_custom_font(27, "bold")
+        title = Label(self, text="추천받은 코디야!", font=title_font, bg="#FFFFFF", fg="black")
+        title.place(x=30, y=175) 
         
         self.styleBottomImage = PhotoImage(file=self.styleResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
