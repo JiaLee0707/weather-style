@@ -1,13 +1,11 @@
 from tkinter import Frame, PhotoImage, Label
 from utils.utils import get_assets_path, CustomCanvas, get_current_temperature, load_custom_font
-from datetime import datetime, date
 import webbrowser
 from db import db
 
 ASSETS_PATH = get_assets_path("/recommend_result")
 
 BACKGROUND_IMAGE_PATH = get_assets_path("/common/background.png")
-TITLE_IMAGE_PATH = ASSETS_PATH / "title.png"
 
 SAVE_INSTRUCTIONS_IMAGE_PATH = ASSETS_PATH / "save_Instructions.png"
 
@@ -17,7 +15,7 @@ BEFORE_IMAGE_PATH = get_assets_path("/common/before_button.png")
 
 LINK_IMAGE_PATH = ASSETS_PATH / "link.png"
 
-class RecommendResult(Frame):
+class SaveStyle(Frame):
     def __init__(self, parent, controller, width, height):
         super().__init__(parent)
         self.controller = controller
@@ -30,6 +28,7 @@ class RecommendResult(Frame):
         self.recommendResult = None
 
         self.draw_screen()
+        # self.draw_style_result()
     
     def draw_screen(self):
 
@@ -40,21 +39,13 @@ class RecommendResult(Frame):
             image=self.background_image
         )
 
-        self.title_image = PhotoImage(file=TITLE_IMAGE_PATH)    
-        self.title = self.canvas.create_image(
-            134.0,
-            176.0,
-            image=self.title_image
-        )
-
-        self.save_button_image = PhotoImage(file=SAVE_IMAGE_PATH)
         self.move_button_image = PhotoImage(file=MOVE_IMAGE_PATH)
-        self.result_button = self.canvas.create_image(
+        self.move_button = self.canvas.create_image(
             20.0 + 263.0 / 2,
             714.0,
-            image=self.save_button_image
+            image=self.move_button_image
         )
-        self.canvas.tag_bind(self.result_button, "<Button-1>", lambda e: self.button_event_handler("save"))
+        self.canvas.tag_bind(self.move_button, "<Button-1>", lambda e: self.button_event_handler("move"))
 
         self.before_button_image = PhotoImage(file=BEFORE_IMAGE_PATH)    
         self.before_button = self.canvas.create_image(
@@ -65,56 +56,40 @@ class RecommendResult(Frame):
         self.canvas.tag_bind(self.before_button, "<Button-1>", lambda e: self.button_event_handler("before"))
 
     def button_event_handler(self, type):
-        if type == 'save':
-            recommendDate = self.controller.recommend_date
-            matchingDate = "%d-%d-%d" % (recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
-            temp = int(get_current_temperature(matchingDate))
-
-            db.saveMachingStyle(matchingDate, temp, self.recommendResult.get('id'), self.recommendResult.get('bottom.id'))
-
-            self.save_lnstructions_image = PhotoImage(file=SAVE_INSTRUCTIONS_IMAGE_PATH)    
-            self.save_lnstructions = self.canvas.create_image(
-                375 / 2,
-                660.0,
-                image=self.save_lnstructions_image,
-                tag="save"
-            )
-            self.canvas.itemconfig(self.result_button, image=self.move_button_image)
-            self.canvas.tag_unbind(self.result_button, "<Button-1>")
-            self.canvas.tag_bind(self.result_button, "<Button-1>", lambda e: self.button_event_handler("move"))
-        elif type == 'move':
+        if type == 'move':
             self.controller.show_frame("StyleList")
-            self.reset()
+            # self.reset()
         elif type == 'before':
             self.controller.show_frame("Main")
-            self.reset()
+            # self.reset()
 
     def reset(self):
-        self.canvas.delete("save")
         self.canvas.delete("styleBottom")
         self.canvas.delete("styleTop")
-        self.canvas.itemconfig(self.result_button, image=self.save_button_image)
-        self.canvas.tag_unbind(self.result_button, "<Button-1>")
-        self.canvas.tag_bind(self.result_button, "<Button-1>", lambda e: self.button_event_handler("save"))
-        self.controller.recommend_date = None
-        self.controller.recommend_style = None
+        # self.controller.recommend_date = None
+        # self.controller.recommend_style = None
 
     def draw_style_result(self): 
-        recommendDate = self.controller.recommend_date
-        matchingDate = "%d-%d-%d" % (recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
-        temp = int(get_current_temperature(matchingDate))
+        # 아이디 값 변경 필요 !!!!!
+        self.styleResult = db.getStyleById(1)
+
+        title_font = load_custom_font(26, "bold")
+        title = Label(self, text=self.styleResult.get('matching_date').strftime("%Y/%m/%d"), font=title_font, bg="#FFFFFF", fg="black")
+        title.place(x=30, y=135) 
+        title = Label(self, text="추천받은 코디야!", font=title_font, bg="#FFFFFF", fg="black")
+        title.place(x=30, y=175)
 
         self.temperatureShape = self.canvas.create_oval(290, 140, 350, 200, fill="#F362AD", width=0)
         temperatureFont = load_custom_font(14, "bold")
         title = Label(self, text="°c", font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
         title.place(x=323, y=158)
         temperatureFont = load_custom_font(20, "bold")
-        title = Label(self, text=temp, font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
+        title = Label(self, text=self.styleResult.get('temperature'), font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
         title.place(x=296, y=153)
         
-        self.recommendResult = db.getRandomStyle(temp, self.controller.recommend_style)[0]
+
         
-        self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
+        self.styleBottomImage = PhotoImage(file=self.styleResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
             220.0,  # x 좌표
             500.0,  # y 좌표
@@ -122,7 +97,7 @@ class RecommendResult(Frame):
             tags="styleBottom"
         )
 
-        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(4, 4)
+        self.styleTopImage = PhotoImage(file=self.styleResult.get('image_path')).subsample(4, 4)
         self.styleTop = self.canvas.create_image(
             160.0,  # x 좌표
             350.0,  # y 좌표
@@ -138,7 +113,7 @@ class RecommendResult(Frame):
             image = self.styleLTopLinkImage,
             tags="styleTopLink"
         )
-        self.canvas.tag_bind(self.styleTopLink, "<Button-1>", lambda e: self.open_webbrowser(self.recommendResult.get('link')))
+        self.canvas.tag_bind(self.styleTopLink, "<Button-1>", lambda e: self.open_webbrowser(self.styleResult.get('link')))
         
         self.styleBottomLinkImage = PhotoImage(file=LINK_IMAGE_PATH)
         self.styleBottomLink = self.canvas.create_image(
@@ -147,9 +122,8 @@ class RecommendResult(Frame):
             image = self.styleBottomLinkImage,
             tags="styleBottomLink"
         )
-        self.canvas.tag_bind(self.styleBottomLink, "<Button-1>", lambda e: self.open_webbrowser(self.recommendResult.get('bottom.link')))
+        self.canvas.tag_bind(self.styleBottomLink, "<Button-1>", lambda e: self.open_webbrowser(self.styleResult.get('bottom.link')))
         
-
     def open_webbrowser(self, url):
         webbrowser.open_new(url)
             

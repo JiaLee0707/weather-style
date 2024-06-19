@@ -124,10 +124,17 @@ class StyleList(Frame):
             714.0,
             image=self.recommend_button_image
         )
-        self.canvas.tag_bind(self.recommend_button, "<Button-1>", lambda e: self.button_event_handler())
+        self.canvas.tag_bind(self.recommend_button, "<Button-1>", lambda e: self.button_event_handler('recommend'))
 
-    def button_event_handler(self):
-        self.controller.show_frame("RecommendCalendar")
+    def button_event_handler(self, type):
+        if type == 'recommend':
+            self.controller.show_frame("RecommendCalendar")
+        elif type == 'style':
+            # self.controller.set_recommend_date()
+            # self.controller.set_recommend_style()
+            
+            self.controller.show_frame("SaveStyle")
+
 
     def reset(self):
         pass
