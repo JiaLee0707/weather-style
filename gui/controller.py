@@ -31,6 +31,7 @@ class Controller:
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
             
+        self.show_frame("StyleList")
         self.show_frame("Main")
 
     def show_frame(self, page_name):
