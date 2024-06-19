@@ -64,6 +64,11 @@ class RecommendResult(Frame):
 
     def button_event_handler(self, type):
         if type == 'save':
+            recommendDate = self.controller.recommend_date
+            matchingDate = "%d-%d-%d" %(recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
+            # 온도 변경 필요
+            db.saveMachingStyle(matchingDate, 10, self.recommendResult.get('id'), self.recommendResult.get('bottom.id'))
+
             self.save_lnstructions_image = PhotoImage(file=SAVE_INSTRUCTIONS_IMAGE_PATH)    
             self.save_lnstructions = self.canvas.create_image(
                 375 / 2,
@@ -93,7 +98,6 @@ class RecommendResult(Frame):
         
         # 온도 변경 필요
         self.recommendResult = db.getRandomStyle(10, self.controller.recommend_style)[0]
-        print()
 
         self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(

@@ -135,8 +135,14 @@ class RecommendCalendar(Frame):
         self.canvas.create_image(self.day_widgets[day]["x"] + self.cell_width // 2, self.day_widgets[day]["y"] + self.cell_height // 2, image=self.star_image, tags="star")
 
         self.canvas.create_text(self.day_widgets[day]["x"] + self.cell_width // 2, self.day_widgets[day]["y"] + self.cell_height // 2, text=str(day), fill="white", font=day_font, tags="selected_day")
+
+        today = date.today()
+        day_today = today.day
+        month = today.month + 1 if day_today > int(day) else today.month
+        month = 1 if month >= 13 else month
+        year = today.year + 1 if today.month > month else today.year
         
-        selected_day = {"day": day, "x": self.day_widgets[day]["x"], "y": self.day_widgets[day]["y"]}
+        selected_day = {"year": year, "month": month, "day": int(day), "x": self.day_widgets[day]["x"], "y": self.day_widgets[day]["y"]}
     
         self.controller.set_recommend_date(selected_day)
 
