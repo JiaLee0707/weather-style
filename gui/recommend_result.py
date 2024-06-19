@@ -1,5 +1,5 @@
 from tkinter import Frame, PhotoImage, Label
-from utils.utils import get_assets_path, CustomCanvas, get_current_temperature
+from utils.utils import get_assets_path, CustomCanvas, get_current_temperature, load_custom_font
 from datetime import datetime, date
 import webbrowser
 from db import db
@@ -68,7 +68,7 @@ class RecommendResult(Frame):
         if type == 'save':
             recommendDate = self.controller.recommend_date
             matchingDate = "%d-%d-%d" % (recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
-            temp = get_current_temperature(matchingDate)
+            temp = int(get_current_temperature(matchingDate))
 
             db.saveMachingStyle(matchingDate, temp, self.recommendResult.get('id'), self.recommendResult.get('bottom.id'))
 
@@ -100,7 +100,19 @@ class RecommendResult(Frame):
         self.controller.recommend_style = None
 
     def draw_style_result(self): 
-        self.recommendResult = db.getRandomStyle(10, self.controller.recommend_style)[0]
+        recommendDate = self.controller.recommend_date
+        matchingDate = "%d-%d-%d" % (recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
+        temp = int(get_current_temperature(matchingDate))
+
+        self.temperatureShape = self.canvas.create_oval(290, 140, 350, 200, fill="#F362AD", width=0)
+        temperatureFont = load_custom_font(14, "bold")
+        title = Label(self, text="°c", font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
+        title.place(x=323, y=158)
+        temperatureFont = load_custom_font(20, "bold")
+        title = Label(self, text=temp, font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
+        title.place(x=296, y=153)
+        
+        self.recommendResult = db.getRandomStyle(temp, self.controller.recommend_style)[0]
         
         self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
