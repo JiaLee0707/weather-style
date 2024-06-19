@@ -100,7 +100,11 @@ class RecommendResult(Frame):
         self.controller.recommend_style = None
 
     def draw_style_result(self): 
-        self.recommendResult = db.getRandomStyle(10, self.controller.recommend_style)[0]
+        recommendDate = self.controller.recommend_date
+        matchingDate = "%d-%d-%d" % (recommendDate.get('year'), recommendDate.get('month'), recommendDate.get('day'))
+        temp = get_current_temperature(matchingDate)
+        
+        self.recommendResult = db.getRandomStyle(temp, self.controller.recommend_style)[0]
         
         self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
