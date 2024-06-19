@@ -1,6 +1,9 @@
 from tkinter import Frame
 from gui.main import Main
-from gui.recommend import Recommend
+from gui.recommend_calendar import RecommendCalendar 
+from gui.recommend_style import RecommendStyle 
+from gui.recommend_result import RecommendResult
+from gui.style_list import StyleList
 
 WINDOW_WIDTH = 375
 WINDOW_HEIGHT = 812
@@ -12,18 +15,21 @@ class Controller:
         self.root.geometry("%dx%d" % (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.root.configure(bg="#FFCBDD")
 
+        self.recommend_date = None
+        self.recommend_style = None
+
         container = Frame(self.root)
         container.pack(side="top", fill="both", expand=True)
 
         self.frames = {}
         
-        for F in (Main, Recommend):
+        for F in (Main, RecommendCalendar, RecommendStyle, RecommendResult, StyleList):
             page_name = F.__name__
             frame = F(parent=container, controller=self, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
-        self.show_frame("Recommend")
+        self.show_frame("StyleList")
 
     def show_frame(self, page_name):
         # for frame in self.frames.values():
@@ -31,3 +37,9 @@ class Controller:
 
         frame = self.frames[page_name]
         frame.tkraise()
+
+    def set_recommend_date(self, date):
+        self.recommend_date = date
+    
+    def set_recommend_style(self, style): # tag
+        self.recommend_style = style
