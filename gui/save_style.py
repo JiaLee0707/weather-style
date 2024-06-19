@@ -73,12 +73,21 @@ class SaveStyle(Frame):
         # 아이디 값 변경 필요 !!!!!
         self.styleResult = db.getStyleById(1)
 
-        title_font = load_custom_font(27, "bold")
+        title_font = load_custom_font(26, "bold")
         title = Label(self, text=self.styleResult.get('matching_date').strftime("%Y/%m/%d"), font=title_font, bg="#FFFFFF", fg="black")
         title.place(x=30, y=135) 
-        title_font = load_custom_font(27, "bold")
         title = Label(self, text="추천받은 코디야!", font=title_font, bg="#FFFFFF", fg="black")
-        title.place(x=30, y=175) 
+        title.place(x=30, y=175)
+
+        self.temperatureShape = self.canvas.create_oval(290, 140, 350, 200, fill="#F362AD", width=0)
+        temperatureFont = load_custom_font(14, "bold")
+        title = Label(self, text="°c", font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
+        title.place(x=323, y=158)
+        temperatureFont = load_custom_font(20, "bold")
+        title = Label(self, text=self.styleResult.get('temperature'), font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
+        title.place(x=296, y=153)
+        
+
         
         self.styleBottomImage = PhotoImage(file=self.styleResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
