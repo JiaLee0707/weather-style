@@ -29,7 +29,7 @@ class Controller:
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         
-        self.show_frame("Main")
+        self.show_frame("StyleList")
 
     def show_frame(self, page_name):
         # for frame in self.frames.values():

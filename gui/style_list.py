@@ -1,7 +1,5 @@
 from tkinter import Frame, PhotoImage, Label, Canvas, Scrollbar
 from utils.utils import get_assets_path, CustomCanvas, load_custom_font
-from datetime import datetime, date
-import calendar
 from db import db
 
 ASSETS_PATH = get_assets_path("/style_list")
@@ -45,7 +43,7 @@ class StyleList(Frame):
         self.topImage = []
         self.topImageIndex = 0
 
-        self.draw_screen()
+        # self.draw_screen()
 
     def on_frame_configure(self, event=None):
         self.scrollable_canvas.configure(scrollregion=self.scrollable_canvas.bbox("all"))
@@ -79,24 +77,46 @@ class StyleList(Frame):
         else:
             matchingDateSet = sorted(set([styleInfo.get("matching_date") for styleInfo in styleList]), reverse=True)
             row = 0
-
+            # col = 0
+            print("matchingDateSet", matchingDateSet)
             for matchingDate in matchingDateSet:
                 mathcingDateStyleList = [styleInfo for styleInfo in styleList if styleInfo.get("matching_date") == matchingDate]
 
+                print("mathcingDateStyleList", mathcingDateStyleList)
+                print("len(mathcingDateStyleList)", len(mathcingDateStyleList))
                 date_font = load_custom_font(24, "bold")
-                self.date = Label(self.inner_frame, text=matchingDate.strftime("%Y.%m.%d"), font=date_font, bg="#FFFFFF", fg="black")
-                self.date.grid(row=row, column=0, columnspan=1, pady=(20, 0)) 
+                date = Label(self.inner_frame, text=matchingDate.strftime("%Y.%m.%d"), font=date_font, bg="#FFFFFF", fg="black")
+            
+                date.grid(row=row, column=0, columnspan=1, padx=0, pady=5) 
                 row += 1
+                print('row', row)
+                # print("len(mathcingDateStyleList)", len(mathcingDateStyleList))
                 
+                col = 0
                 for i in range(len(mathcingDateStyleList)):
-                    self.topImage.append(PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(10, 10))
-                    contents_label = Label(self.inner_frame, image=self.topImage[self.topImageIndex], bg="#FFFFFF")
-                    self.topImageIndex += 1
+                    self.topImage = PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(10, 10)
+                    self.bottomImage = PhotoImage(file=mathcingDateStyleList[i].get('bottom.image_path')).subsample(10, 10)
+                    
+                    contents_label = Label(self.inner_frame, image=self.topImage, bg="#ffffff", width=147, height=212)
+                    contents_label.image = self.topImage
+                    contents_label.grid(row=row, column=col, padx=5, pady=5)
+
+                    col += 1
+                    # self.topImage.append(PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(10, 10))
+                    # self.bottomImage.append(PhotoImage(file=mathcingDateStyleList[i].get('bottom.image_path')).subsample(10, 10))
+                    # contents_label = Label(self.inner_frame, image=self.topImage, bg="#000000", width=147, height=212)
+                    # self.topImageIndex += 1
                     # contents_label.pack(pady=(30, i))
-                    contents_label.grid(row=row, column=i % 2, padx=5, pady=(10, 10))
-                    contents_label.grid(row=row, column=i % 2, padx=5, pady=(10, 10))
-                    if (i % 2 == 1) : 
+                    # contents_label.grid(row=row, column=(i % 2)*2)
+            # top_label.grid(row=row, column=(i % 2) * 2)
+            # bottom_label.grid(row=row, column=(i % 2) * 2 + 1)
+                    # contents_label.grid(row=row, column=i % 2, padx=5, pady=(10, 10))
+                    # contents_label.grid(row=row, column=i % 2, padx=5, pady=(10, 10))
+                    # col += 1
+                    if col == 2: 
                         row += 1
+                        col = 0
+                row += 1
 
         self.recommend_button_image = PhotoImage(file=RECOMMEND_IMAGE_PATH)
         self.recommend_button = self.canvas.create_image(
