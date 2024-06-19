@@ -2,6 +2,7 @@ from tkinter import Frame, PhotoImage, Label
 from utils.utils import get_assets_path, CustomCanvas, load_custom_font
 from datetime import datetime, date
 import calendar
+from db import db
 
 ASSETS_PATH = get_assets_path("/recommend_result")
 
@@ -23,10 +24,13 @@ class RecommendResult(Frame):
         self.canvas = CustomCanvas(self, width=width, height=height)
 
         self.isSave = False
+        
+        self.recommendResult = None
 
         self.draw_screen()
     
     def draw_screen(self):
+
         self.background_image = PhotoImage(file=BACKGROUND_IMAGE_PATH)    
         self.background = self.canvas.create_image(
             187.0,  # x 좌표
@@ -59,7 +63,6 @@ class RecommendResult(Frame):
         self.canvas.tag_bind(self.retry_button, "<Button-1>", lambda e: self.button_event_handler("retry"))
 
     def button_event_handler(self, type):
-        print(type)
         if type == 'save':
             self.save_lnstructions_image = PhotoImage(file=SAVE_INSTRUCTIONS_IMAGE_PATH)    
             self.save_lnstructions = self.canvas.create_image(
@@ -86,8 +89,27 @@ class RecommendResult(Frame):
         self.controller.recommend_date = None
         self.controller.recommend_style = None
 
+    def draw_style_result(self): 
+        
+        # 온도 변경 필요
+        self.recommendResult = db.getRandomStyle(10, self.controller.recommend_style)[0]
+        print()
+
+        self.styleBottomImage = PhotoImage(file=self.recommendResult.get('bottom.image_path')).subsample(4, 4)
+        self.styleBottom = self.canvas.create_image(
+            220.0,  # x 좌표
+            500.0,  # y 좌표
+            image = self.styleBottomImage
+        )
+
+        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(4, 4)
+        self.styleTop = self.canvas.create_image(
+            160.0,  # x 좌표
+            350.0,  # y 좌표
+            image = self.styleTopImage
+        )
+    
             
     def tkraise(self, aboveThis=None):
         super().tkraise(aboveThis)
-        print("aaaa")
-        # self.update_data_from_server()
+        self.draw_style_result()

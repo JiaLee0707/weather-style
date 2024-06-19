@@ -67,7 +67,7 @@ class RecommendStyle(Frame):
             357.0,
             image=self.lovely_button_disabled_image
         )
-        self.canvas.tag_bind(self.lovely_button, "<Button-1>", lambda e: self.style_button_event_handler("lovely"))
+        self.canvas.tag_bind(self.lovely_button, "<Button-1>", lambda e: self.style_button_event_handler("러블리"))
         
 
         self.feminine_button_disabled_image = PhotoImage(file=FEMININE_BUTTON_DISABLED_IMAGE_PATH)    
@@ -77,7 +77,7 @@ class RecommendStyle(Frame):
             357.0,
             image=self.feminine_button_disabled_image
         )
-        self.canvas.tag_bind(self.feminine_button, "<Button-1>", lambda e: self.style_button_event_handler("feminine"))
+        self.canvas.tag_bind(self.feminine_button, "<Button-1>", lambda e: self.style_button_event_handler("페미닌"))
 
 
         self.street_button_disabled_image = PhotoImage(file=STREET_BUTTON_DISABLED_IMAGE_PATH)    
@@ -87,7 +87,7 @@ class RecommendStyle(Frame):
             513.0,
             image=self.street_button_disabled_image
         )
-        self.canvas.tag_bind(self.street_button, "<Button-1>", lambda e: self.style_button_event_handler("street"))
+        self.canvas.tag_bind(self.street_button, "<Button-1>", lambda e: self.style_button_event_handler("스트릿"))
 
 
         self.casual_button_disabled_image = PhotoImage(file=CASUAL_BUTTON_DISABLED_IMAGE_PATH)    
@@ -97,7 +97,7 @@ class RecommendStyle(Frame):
                 513.0,
                 image=self.casual_button_disabled_image
         )
-        self.canvas.tag_bind(self.casual_button, "<Button-1>", lambda e: self.style_button_event_handler("casual"))
+        self.canvas.tag_bind(self.casual_button, "<Button-1>", lambda e: self.style_button_event_handler("캐주얼"))
 
         
     def style_button_event_handler(self, style):
@@ -108,13 +108,13 @@ class RecommendStyle(Frame):
             self.canvas.itemconfig(self.casual_button, image=self.casual_button_disabled_image)
             # self.controller.show_frame(style)
 
-        if style == 'lovely':
+        if style == '러블리':
             self.canvas.itemconfig(self.lovely_button, image=self.lovely_button_image)
-        elif style == 'feminine':
+        elif style == '페미닌':
             self.canvas.itemconfig(self.feminine_button, image=self.feminine_button_image)
-        elif style == 'street':
+        elif style == '스트릿':
             self.canvas.itemconfig(self.street_button, image=self.street_button_image)
-        elif style == 'casual':
+        elif style == '캐주얼':
             self.canvas.itemconfig(self.casual_button, image=self.casual_button_image)
                 
         self.canvas.itemconfig(self.next_button, image=self.next_button_image)
