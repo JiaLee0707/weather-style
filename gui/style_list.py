@@ -57,21 +57,24 @@ class StyleList(Frame):
             image=self.background_image
         )
 
+        # 저장된 코디 리스트 불러오기
         styleList = db.getStyleList()
-
-        if len(styleList) <= 0:
+        
+        if len(styleList) <= 0: # 저장된 코디 없을 때
             self.notting_saved_image = PhotoImage(file=NOTHING_SAVED_IMAGE_PATH)    
             self.noting_saved = self.canvas.create_image(
                 375.0 / 2,
                 400.0,
                 image=self.notting_saved_image
             )
-        else:
+        else: # 저장된 코디 있을 때
+            self.images = []
 
-            self.images = []  # 이미지 객체를 저장할 리스트
+            # 날짜별 코디 정렬
             matchingDateSet = sorted(set([styleInfo.get("matching_date") for styleInfo in styleList]), reverse=True)
             row = 0
 
+            # 날짜별 반복문
             for matchingDate in matchingDateSet:
                 mathcingDateStyleList = [styleInfo for styleInfo in styleList if styleInfo.get("matching_date") == matchingDate]
 
@@ -81,6 +84,8 @@ class StyleList(Frame):
                 row += 1
 
                 col = 0
+
+                # 코디별 반복문
                 for i in range(len(mathcingDateStyleList)):
                     self.topImage = PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(10, 10)
                     self.bottomImage = PhotoImage(file=mathcingDateStyleList[i].get('bottom.image_path')).subsample(10, 10)
@@ -96,14 +101,11 @@ class StyleList(Frame):
                     self.images.append(self.topImage)
                     self.images.append(self.bottomImage)
 
-                    # self.contents_label.place(x=0, y=0)
-                    # self.contents_label2.place(x=0, y=0)
                     self.frame.grid(row=row, column=col, padx=5, pady=5)
                     self.contents_label.bind("<Button-1>", lambda e, styleIndex=mathcingDateStyleList[i].get('id'): self.style_button_event_handler(styleIndex))
                     self.contents_label2.bind("<Button-1>", lambda e, styleIndex=mathcingDateStyleList[i].get('id'): self.style_button_event_handler(styleIndex))
 
                     col += 1
-
                     if col == 2: 
                         row += 1
                         col = 0

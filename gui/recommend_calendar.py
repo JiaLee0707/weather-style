@@ -90,8 +90,9 @@ class RecommendCalendar(Frame):
         self.day_widgets = {}
         self.text_id = {}
 
-        for week_index, week in enumerate(cal):
-            for day_index, day in enumerate(week):
+        # 달력을 그리기 위한 이중 for문
+        for week_index, week in enumerate(cal): # 주
+            for day_index, day in enumerate(week): # 일
                 if day == 0:
                     day_str = ""
                 else:
@@ -105,6 +106,7 @@ class RecommendCalendar(Frame):
                 if day_index == 0 or day_index == 6:
                     font_color = "#FF41A3"
                 
+                # 오늘 날짜로부터 최대 10일 내가 아니면 비활성화
                 if day != 0 and not (day_today <= day <= day_today + 9):
                     isDisabled = True
                     if day_index == 0 or day_index == 6:
@@ -114,17 +116,15 @@ class RecommendCalendar(Frame):
 
                 self.text_id[day_str] = self.canvas.create_text(x + self.cell_width // 2, y + self.cell_height // 2, text=day_str, fill=font_color, font=day_font, tags=day_str)
         
+                # 오늘 날짜로부터 최대 10일 내면 버튼 활성화
                 if day != 0 and not isDisabled:
                     self.day_widgets[day_str] = {"text-id" : self.text_id[day_str], "x": x, "y": y}  # 날짜별로 좌표를 저장
                     self.canvas.tag_bind(self.text_id[day_str], "<Button-1>", lambda e, ds=day_str: self.date_button_event_handler(ds))
-
-        # self.canvas.create_text(self.start_x, self.start_y - self.cell_height, anchor="nw", text=f"{year}년 {month}월", font=day_font)
 
     def date_button_event_handler(self, day):
         day_font = load_custom_font(14, "bold")
 
         if self.controller.recommend_date is not None:
-            # selected_day = str(self.controller.recommend_date["day"])
 
             self.canvas.delete("star")
             self.canvas.delete("selected_day")
