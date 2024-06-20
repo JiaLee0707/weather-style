@@ -1,5 +1,5 @@
 from tkinter import Frame, PhotoImage, Label
-from utils.utils import get_assets_path, CustomCanvas, get_current_temperature, load_custom_font
+from utils.utils import get_assets_path, CustomCanvas, load_custom_font
 import webbrowser
 from db import db
 
@@ -28,7 +28,6 @@ class SaveStyle(Frame):
         self.recommendResult = None
 
         self.draw_screen()
-        # self.draw_style_result()
     
     def draw_screen(self):
 
@@ -58,16 +57,12 @@ class SaveStyle(Frame):
     def button_event_handler(self, type):
         if type == 'move':
             self.controller.show_frame("StyleList")
-            # self.reset()
         elif type == 'before':
             self.controller.show_frame("Main")
-            # self.reset()
 
     def reset(self):
         self.canvas.delete("styleBottom")
         self.canvas.delete("styleTop")
-        # self.controller.recommend_date = None
-        # self.controller.recommend_style = None
 
     def draw_style_result(self): 
         self.styleResult = db.getStyleById(self.controller.style_index)
@@ -86,8 +81,6 @@ class SaveStyle(Frame):
         title = Label(self, text=self.styleResult.get('temperature'), font=temperatureFont, bg="#F362AD", fg="#FFFFFF")
         title.place(x=296, y=153)
         
-
-        
         self.styleBottomImage = PhotoImage(file=self.styleResult.get('bottom.image_path')).subsample(4, 4)
         self.styleBottom = self.canvas.create_image(
             220.0,  # x 좌표
@@ -96,14 +89,13 @@ class SaveStyle(Frame):
             tags="styleBottom"
         )
 
-        self.styleTopImage = PhotoImage(file=self.styleResult.get('image_path')).subsample(4, 4)
+        self.styleTopImage = PhotoImage(file=self.styleResult.get('image_path')).subsample(3, 3)
         self.styleTop = self.canvas.create_image(
             160.0,  # x 좌표
             350.0,  # y 좌표
             image = self.styleTopImage,
             tags="styleTop"
         )
-
 
         self.styleLTopLinkImage = PhotoImage(file=LINK_IMAGE_PATH)
         self.styleTopLink = self.canvas.create_image(

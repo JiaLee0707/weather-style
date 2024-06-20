@@ -125,11 +125,11 @@ class RecommendCalendar(Frame):
         day_font = load_custom_font(14, "bold")
 
         if self.controller.recommend_date is not None:
-
             self.canvas.delete("star")
             self.canvas.delete("selected_day")
 
         self.canvas.itemconfig(self.next_button, image=self.next_button_image)
+
         # 스타 이미지 추가
         self.star_image = PhotoImage(file=STAR_IMAGE_PATH)
         self.canvas.create_image(self.day_widgets[day]["x"] + self.cell_width // 2, self.day_widgets[day]["y"] + self.cell_height // 2, image=self.star_image, tags="star")
@@ -157,4 +157,3 @@ class RecommendCalendar(Frame):
         self.canvas.delete("star")
         self.canvas.delete("selected_day")
         self.canvas.itemconfig(self.next_button, image=self.next_button_disabled_image)
-

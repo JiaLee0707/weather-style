@@ -1,6 +1,5 @@
 from tkinter import Frame, PhotoImage, Label
 from utils.utils import get_assets_path, CustomCanvas, get_current_temperature, load_custom_font
-from datetime import datetime, date
 import webbrowser
 from db import db
 
@@ -122,7 +121,7 @@ class RecommendResult(Frame):
             tags="styleBottom"
         )
 
-        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(4, 4)
+        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(3, 3)
         self.styleTop = self.canvas.create_image(
             160.0,  # x 좌표
             350.0,  # y 좌표
