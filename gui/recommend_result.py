@@ -1,6 +1,5 @@
 from tkinter import Frame, PhotoImage, Label
 from utils.utils import get_assets_path, CustomCanvas, get_current_temperature, load_custom_font
-from datetime import datetime, date
 import webbrowser
 from db import db
 

@@ -1,7 +1,5 @@
-from tkinter import Frame, PhotoImage, Label
-from utils.utils import get_assets_path, CustomCanvas, load_custom_font
-from datetime import datetime, date
-import calendar
+from tkinter import Frame, PhotoImage
+from utils.utils import get_assets_path, CustomCanvas
 
 ASSETS_PATH = get_assets_path("/recommend_style")
 
@@ -56,8 +54,6 @@ class RecommendStyle(Frame):
             image=self.next_button_disabled_image
         )
         self.canvas.tag_bind(self.next_button, "<Button-1>", lambda e: self.next_button_event_handler("click"))
-        # self.canvas.tag_bind(self.next_button, "<Enter>", lambda e: self.next_button_event_handler("enter"))
-        # self.canvas.tag_bind(self.next_button, "<Leave>", lambda e: self.next_button_event_handler("leave"))
 
         # styles
         self.lovely_button_disabled_image = PhotoImage(file=LOVELY_BUTTON_DISABLED_IMAGE_PATH)    
@@ -106,7 +102,6 @@ class RecommendStyle(Frame):
             self.canvas.itemconfig(self.feminine_button, image=self.feminine_button_disabled_image)
             self.canvas.itemconfig(self.street_button, image=self.street_button_disabled_image)
             self.canvas.itemconfig(self.casual_button, image=self.casual_button_disabled_image)
-            # self.controller.show_frame(style)
 
         if style == '러블리':
             self.canvas.itemconfig(self.lovely_button, image=self.lovely_button_image)
@@ -126,11 +121,6 @@ class RecommendStyle(Frame):
             if self.controller.recommend_style is not None:
                 self.controller.show_frame("RecommendResult")
                 self.reset()
-            # self.controller.show_frame("Gui2")
-        # elif eventType == 'enter':
-        #     self.canvas.itemconfig(self.style_list_button, image=self.style_list_hover_image)
-        # elif eventType == 'leave':
-        #     self.canvas.itemconfig(self.style_list_button, image=self.style_list_image)
 
     def reset(self):
         self.canvas.itemconfig(self.lovely_button, image=self.lovely_button_disabled_image)

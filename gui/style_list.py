@@ -96,14 +96,11 @@ class StyleList(Frame):
                     self.images.append(self.topImage)
                     self.images.append(self.bottomImage)
 
-                    # self.contents_label.place(x=0, y=0)
-                    # self.contents_label2.place(x=0, y=0)
                     self.frame.grid(row=row, column=col, padx=5, pady=5)
                     self.contents_label.bind("<Button-1>", lambda e, styleIndex=mathcingDateStyleList[i].get('id'): self.style_button_event_handler(styleIndex))
                     self.contents_label2.bind("<Button-1>", lambda e, styleIndex=mathcingDateStyleList[i].get('id'): self.style_button_event_handler(styleIndex))
 
                     col += 1
-
                     if col == 2: 
                         row += 1
                         col = 0

@@ -22,12 +22,8 @@ default_font = None
 
 def load_custom_font(size=24, weight="bold"):
     font_path_str = str(DEFAULT_FONT_PATH)
-    # print(DEFAULT_FONT_PATH)
     if not Path(font_path_str).exists():
         raise FileNotFoundError(f"Font file not found: {font_path_str}")
-
-    # Register the font
-    # tk._default_root.tk.call('font', 'create', 'OneMobilePopFont', '-family', 'ONE Mobile POP', '-size', '100')
 
     # Create a custom font object
     custom_font = tk.font.Font(family="ONE Mobile POP", size=size, weight=weight)
@@ -61,5 +57,3 @@ class CustomCanvas(Canvas):
 
         self.background_image = PhotoImage(file=get_assets_path('/common/check.png'))
         self.create_image(width/2, height/2, image=self.background_image)
-
-        # self.custom_font = self.load_custom_font()

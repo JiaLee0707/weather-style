@@ -35,9 +35,6 @@ class Controller:
         self.show_frame("Main")
 
     def show_frame(self, page_name):
-        # for frame in self.frames.values():
-        #     frame.forget()
-
         frame = self.frames[page_name]
         frame.tkraise()
 
