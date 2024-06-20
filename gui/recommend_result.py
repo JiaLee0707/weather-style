@@ -122,7 +122,7 @@ class RecommendResult(Frame):
             tags="styleBottom"
         )
 
-        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(4, 4)
+        self.styleTopImage = PhotoImage(file=self.recommendResult.get('image_path')).subsample(3, 3)
         self.styleTop = self.canvas.create_image(
             160.0,  # x 좌표
             350.0,  # y 좌표

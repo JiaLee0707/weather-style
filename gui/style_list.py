@@ -82,7 +82,7 @@ class StyleList(Frame):
 
                 col = 0
                 for i in range(len(mathcingDateStyleList)):
-                    self.topImage = PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(10, 10)
+                    self.topImage = PhotoImage(file=mathcingDateStyleList[i].get('image_path')).subsample(8, 8)
                     self.bottomImage = PhotoImage(file=mathcingDateStyleList[i].get('bottom.image_path')).subsample(10, 10)
                     
                     self.frame = Canvas(self.inner_frame, bg="#FFFFFF", bd=2, relief="solid")
